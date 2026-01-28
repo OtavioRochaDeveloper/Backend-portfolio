@@ -63,7 +63,7 @@ app.post('/send-email', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { // ✅ 
+app.listen(PORT,'0.0.0.0' ,() => { // ✅ 
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📧 Email será enviado para: otaviorocha36@gmail.com`);
   console.log(`🌐 Acesse: http://localhost:${PORT}`);
