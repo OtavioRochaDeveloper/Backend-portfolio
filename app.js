@@ -1,25 +1,15 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+const { Resend } = require('resend');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false
-  }
-})
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 app.post('/send-email', async (req, res) => {
   const { nome, email, telefone, mensagem } = req.body;
@@ -31,11 +21,12 @@ app.post('/send-email', async (req, res) => {
      });
   }
 
-  const mailOptions = {
-    from: email,
-    to: 'otaviorocha36@gmail.com',    
-    subject: `Novo contato do portfolio - ${nome}`,
-    html:`
+  try {
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'otaviorocha36@gmail.com',
+      subject: `Novo contato via portfolio - ${nome}`,
+      html: `
       <h2>📧 Novo Contato do Portfolio</h2>
       <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; border-radius: 10px;">
       <div style="background-color: white; padding: 20px; border-radius: 8px;">
@@ -50,12 +41,8 @@ app.post('/send-email', async (req, res) => {
         </div>
       </div>
     `,
-    replyTo: email
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true, message: 'Email enviado com sucesso!' });
+    });
+    res.status(200).json({ success: true, message: 'Email enviado com sucesso!' });
   } catch (error) {
     console.error('Erro ao enviar email:', error);
     res.status(500).json({ success: false, message: 'Erro ao enviar email.' });
