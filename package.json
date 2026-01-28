@@ -1,0 +1,23 @@
+{
+  "name": "backend-portfolio-otimizado",
+  "version": "1.0.0",
+  "description": "Backend para recebimento de Email do Portfolio",
+  "license": "ISC",
+  "author": "OTAVIO ROCHA",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "Server Running"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
